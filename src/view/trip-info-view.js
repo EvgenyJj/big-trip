@@ -1,16 +1,18 @@
 import dayjs from 'dayjs';
 
-export const createTripInfoTemplate = (tripEvents) => {
-  const getTotalPrice = () => {
-    let totalPrice = 0;
-    tripEvents.forEach((tripEvent) => {
-      totalPrice += tripEvent.basePrice;
-      tripEvent.offers.offers.forEach((offer) => {
-        totalPrice += offer.price;
-      });
+const getTotalPrice = (tripEvents) => {
+  let totalPrice = 0;
+  tripEvents.forEach((tripEvent) => {
+    totalPrice += tripEvent.basePrice;
+    tripEvent.offers.offers.forEach((offer) => {
+      totalPrice += offer.price;
     });
-    return totalPrice;
-  };
+  });
+  return totalPrice;
+};
+
+export const createTripInfoTemplate = (tripEvents) => {
+  const totalPrice = getTotalPrice(tripEvents);
 
   const getSortedEventsFrom = () => tripEvents.slice().sort((firstEvent, secondEvent) => firstEvent.dateFrom - secondEvent.dateFrom);
 
@@ -50,7 +52,7 @@ export const createTripInfoTemplate = (tripEvents) => {
       </div>
 
       <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalPrice()}</span>
+        Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalPrice}</span>
       </p>
   </section>` : '';
 };

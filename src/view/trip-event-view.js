@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { createElement } from '../utils/utils';
 
 const createOffersTemplate = (offers) => offers.offers.map(({title, price}) =>
   `<li class="event__offer">
@@ -17,7 +18,7 @@ const getTimeDifference = (start, end) => {
 
 const checkFavorite = (isFavorite) => isFavorite ? 'event__favorite-btn--active' : '';
 
-export const createTripEventTemplate = (tripEvent) => {
+const createTripEventTemplate = (tripEvent) => {
   const {basePrice, dateFrom, dateTo, destination, isFavorite, offers, type} = tripEvent;
   const start = dayjs(dateFrom);
   const end = dayjs(dateTo);
@@ -60,3 +61,28 @@ export const createTripEventTemplate = (tripEvent) => {
               </div>
             </li>`;
 };
+
+export default class TripEventView {
+  #element = null;
+  #tripEvent = null;
+
+  constructor(tripEvent) {
+    this.#tripEvent = tripEvent;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createTripEventTemplate(this.#tripEvent);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

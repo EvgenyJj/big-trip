@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import { createElement } from '../utils/utils';
 
 const getTotalPrice = (tripEvents) => {
   let totalPrice = 0;
@@ -11,7 +12,7 @@ const getTotalPrice = (tripEvents) => {
   return totalPrice;
 };
 
-export const createTripInfoTemplate = (tripEvents) => {
+const createTripInfoTemplate = (tripEvents) => {
   const totalPrice = getTotalPrice(tripEvents);
 
   const getSortedEventsFrom = () => tripEvents.slice().sort((firstEvent, secondEvent) => firstEvent.dateFrom - secondEvent.dateFrom);
@@ -56,3 +57,28 @@ export const createTripInfoTemplate = (tripEvents) => {
       </p>
   </section>` : '';
 };
+
+export default class TripInfoView {
+  #element = null;
+  #tripEvents = null;
+
+  constructor(tripEvents) {
+    this.#tripEvents = tripEvents;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createTripInfoTemplate(this.#tripEvents);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

@@ -1,8 +1,8 @@
 import { createElement } from '../utils/utils.js';
 
-const createTripEventsListTemplate = () => '<ul class="trip-events__list"></ul>';
+const createNewEventButtonTemplate = () => '<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button">New event</button>';
 
-export default class TripEventsListView {
+export default class NewEventButtonView {
   #element = null;
 
   get element() {
@@ -14,7 +14,7 @@ export default class TripEventsListView {
   }
 
   get template() {
-    return createTripEventsListTemplate();
+    return createNewEventButtonTemplate();
   }
 
   removeElement() {

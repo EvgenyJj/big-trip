@@ -1,16 +1,19 @@
 import dayjs from 'dayjs';
+import { createElement } from '../utils/utils';
 
-export const createTripInfoTemplate = (tripEvents) => {
-  const getTotalPrice = () => {
-    let totalPrice = 0;
-    tripEvents.forEach((tripEvent) => {
-      totalPrice += tripEvent.basePrice;
-      tripEvent.offers.offers.forEach((offer) => {
-        totalPrice += offer.price;
-      });
+const getTotalPrice = (tripEvents) => {
+  let totalPrice = 0;
+  tripEvents.forEach((tripEvent) => {
+    totalPrice += tripEvent.basePrice;
+    tripEvent.offers.offers.forEach((offer) => {
+      totalPrice += offer.price;
     });
-    return totalPrice;
-  };
+  });
+  return totalPrice;
+};
+
+const createTripInfoTemplate = (tripEvents) => {
+  const totalPrice = getTotalPrice(tripEvents);
 
   const getSortedEventsFrom = () => tripEvents.slice().sort((firstEvent, secondEvent) => firstEvent.dateFrom - secondEvent.dateFrom);
 
@@ -50,7 +53,32 @@ export const createTripInfoTemplate = (tripEvents) => {
       </div>
 
       <p class="trip-info__cost">
-        Total: &euro;&nbsp;<span class="trip-info__cost-value">${getTotalPrice()}</span>
+        Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalPrice}</span>
       </p>
   </section>` : '';
 };
+
+export default class TripInfoView {
+  #element = null;
+  #tripEvents = null;
+
+  constructor(tripEvents) {
+    this.#tripEvents = tripEvents;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createTripInfoTemplate(this.#tripEvents);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

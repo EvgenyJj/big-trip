@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import { CITY_NAMES, TYPES_EVENT } from '../mock/consts.js';
+import { createElement } from '../utils/utils.js';
 
-export const createTripEventEditorTemplate = ({basePrice, dateFrom, dateTo, destination, offers, type}, isNewEvent = false) => {
+const createTripEventEditorTemplate = ({basePrice, dateFrom, dateTo, destination, offers, type}, isNewEvent = false) => {
   const start = dayjs(dateFrom);
   const end = dayjs(dateTo);
 
@@ -27,7 +28,7 @@ export const createTripEventEditorTemplate = ({basePrice, dateFrom, dateTo, dest
           <h3 class="event__section-title  event__section-title--offers">Offers</h3>
             <div class="event__available-offers">
               ${offers.offers.map(({id, title, price}) => `<div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="event-offer-${id}">
+                <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}" type="checkbox" name="event-offer-${id}" checked>
                 <label class="event__offer-label" for="event-offer-${id}">
                   <span class="event__offer-title">${title}</span>
                   &plus;&euro;&nbsp;
@@ -105,3 +106,30 @@ export const createTripEventEditorTemplate = ({basePrice, dateFrom, dateTo, dest
               </form>
             </li>`;
 };
+
+export default class TripEventEditorView {
+  #element = null;
+  #tripEvent = null;
+  #isNewEvent = null;
+
+  constructor(tripEvent, isNewEvent) {
+    this.#tripEvent = tripEvent;
+    this.#isNewEvent = isNewEvent;
+  }
+
+  get element() {
+    if(!this.#element) {
+      this.#element = createElement(this.template);
+    }
+
+    return this.#element;
+  }
+
+  get template() {
+    return createTripEventEditorTemplate(this.#tripEvent, this.#isNewEvent);
+  }
+
+  removeElement() {
+    this.#element = null;
+  }
+}

@@ -1,8 +1,8 @@
 import { createElement } from '../utils/utils.js';
 
-const createLoadingTemplate = () => '<p class="trip-events__msg">Loading...</p>';
+const createNewEventButtonTemplate = () => '<button class="trip-main__event-add-btn  btn  btn--big  btn--yellow" type="button">New event</button>';
 
-export default class LoadingView {
+export default class NewEventButtonView {
   #element = null;
 
   get element() {
@@ -14,7 +14,7 @@ export default class LoadingView {
   }
 
   get template() {
-    return createLoadingTemplate();
+    return createNewEventButtonTemplate();
   }
 
   removeElement() {

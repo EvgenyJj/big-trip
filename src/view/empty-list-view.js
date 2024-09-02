@@ -1,8 +1,8 @@
 import { createElement } from '../utils/utils.js';
 
-const createLoadingTemplate = () => '<p class="trip-events__msg">Loading...</p>';
+const createEmptyListTemplate = () => '<p class="trip-events__msg"></p>';
 
-export default class LoadingView {
+export default class EmptyListView {
   #element = null;
 
   get element() {
@@ -14,7 +14,7 @@ export default class LoadingView {
   }
 
   get template() {
-    return createLoadingTemplate();
+    return createEmptyListTemplate();
   }
 
   removeElement() {

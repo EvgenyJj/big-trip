@@ -7,7 +7,7 @@ export default class EmptyListView {
 
   get element() {
     if(!this.#element) {
-      this.#element = createElement;
+      this.#element = createElement(this.template);
     }
 
     return this.#element;

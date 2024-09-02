@@ -4,7 +4,7 @@ import TripEventEditorView from './view/trip-event-editor-view.js';
 import TabsView from './view/tabs-view.js';
 import FilterView from './view/filter-view.js';
 import NewEventButtonView from './view/new-event-button-view.js';
-import TripEventsListView from './view/trip-events-list-view.js';
+import TripEventListView from './view/trip-event-list-view.js';
 import SortView from './view/sort-view.js';
 import { RenderPosition, render } from './utils/utils.js';
 import { getTripEvent } from './mock/event.js';
@@ -18,17 +18,56 @@ const menuElement = tripMainElement.querySelector('.trip-controls__navigation');
 const filterElement = tripMainElement.querySelector('.trip-controls__filters');
 const tripEventsElement = document.querySelector('.trip-events');
 
+const renderTripEvent = (eventListElement, tripEvent) => {
+  const tripEventComponent = new TripEventView(tripEvent);
+  const tripEventEditComponent = new TripEventEditorView(tripEvent);
+
+  const replaceEventToForm = () => {
+    eventListElement.replaceChild(tripEventEditComponent.element, tripEventComponent.element);
+  };
+
+  const replaceFormToEvent = () => {
+    eventListElement.replaceChild(tripEventComponent.element, tripEventEditComponent.element);
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceFormToEvent();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+  tripEventComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceEventToForm();
+    document.addEventListener('keydown', onEscKeyDown);
+  });
+
+  tripEventEditComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    replaceFormToEvent();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  tripEventEditComponent.element.querySelector('.event--edit').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    replaceFormToEvent();
+    document.removeEventListener('keydown', onEscKeyDown);
+  });
+
+  render(eventListElement, tripEventComponent.element);
+};
+
 render(tripMainElement, new TripInfoView(tripEvents).element, RenderPosition.AFTERBEGIN);
 render(menuElement, new TabsView().element);
 render(filterElement, new FilterView().element);
 render(tripEventsElement, new SortView().element);
 render(tripMainElement, new NewEventButtonView().element);
-render(tripEventsElement, new TripEventsListView().element);
 
-const tripEventsListElement = tripEventsElement.querySelector('.trip-events__list');
+// render(tripEventsListElement, new TripEventEditorView(tripEvents[0]).element);
+const tripEventListComponent = new TripEventListView();
 
-render(tripEventsListElement, new TripEventEditorView(tripEvents[0]).element);
+render(tripEventsElement, tripEventListComponent.element);
 
-for (let i = 1; i < TRIP_EVENTS_COUNT; i++) {
-  render(tripEventsListElement, new TripEventView(tripEvents[i]).element);
+for (let i = 0; i < TRIP_EVENTS_COUNT; i++) {
+  renderTripEvent(tripEventListComponent.element, tripEvents[i]);
 }

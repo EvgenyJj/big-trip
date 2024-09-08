@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createElement } from '../utils/utils';
+import AbstractView from './abstract-view.js';
 
 const getTotalPrice = (tripEvents) => {
   let totalPrice = 0;
@@ -58,27 +58,15 @@ const createTripInfoTemplate = (tripEvents) => {
   </section>` : '';
 };
 
-export default class TripInfoView {
-  #element = null;
+export default class TripInfoView extends AbstractView {
   #tripEvents = null;
 
   constructor(tripEvents) {
+    super();
     this.#tripEvents = tripEvents;
-  }
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createTripInfoTemplate(this.#tripEvents);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

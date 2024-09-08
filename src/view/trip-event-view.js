@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { createElement } from '../utils/utils';
+import AbstractView from './abstract-view.js';
 
 const createOffersTemplate = (offers) => offers.offers.map(({title, price}) =>
   `<li class="event__offer">
@@ -62,27 +62,15 @@ const createTripEventTemplate = (tripEvent) => {
             </li>`;
 };
 
-export default class TripEventView {
-  #element = null;
+export default class TripEventView extends AbstractView {
   #tripEvent = null;
 
   constructor(tripEvent) {
+    super();
     this.#tripEvent = tripEvent;
-  }
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
   }
 
   get template() {
     return createTripEventTemplate(this.#tripEvent);
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

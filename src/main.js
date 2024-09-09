@@ -7,7 +7,7 @@ import NewEventButtonView from './view/new-event-button-view.js';
 import TripEventListView from './view/trip-event-list-view.js';
 import SortView from './view/sort-view.js';
 import EmptyListView from './view/empty-list-view.js';
-import { RenderPosition, render } from './utils/utils.js';
+import { RenderPosition, render, replace } from './utils/render.js';
 import { getTripEvent } from './mock/event.js';
 
 const TRIP_EVENTS_COUNT = 17;
@@ -23,54 +23,54 @@ const renderTripEvent = (eventListElement, tripEvent) => {
   const tripEventComponent = new TripEventView(tripEvent);
   const tripEventEditComponent = new TripEventEditorView(tripEvent);
 
-  const replaceEventToForm = () => {
-    eventListElement.replaceChild(tripEventEditComponent.element, tripEventComponent.element);
+  const replaceTripEventToForm = () => {
+    replace(tripEventEditComponent, tripEventComponent);
   };
 
-  const replaceFormToEvent = () => {
-    eventListElement.replaceChild(tripEventComponent.element, tripEventEditComponent.element);
+  const replaceFormToTripEvent = () => {
+    replace(tripEventComponent, tripEventEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
     if (evt.key === 'Escape' || evt.key === 'Esc') {
       evt.preventDefault();
-      replaceFormToEvent();
+      replaceFormToTripEvent();
       document.removeEventListener('keydown', onEscKeyDown);
     }
   };
 
   tripEventComponent.setEditClickHandler(() => {
-    replaceEventToForm();
+    replaceTripEventToForm();
     document.addEventListener('keydown', onEscKeyDown);
   });
 
   tripEventEditComponent.setEditClickHandler(() => {
-    replaceFormToEvent();
+    replaceFormToTripEvent();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
   tripEventEditComponent.setFormSubmitHandler(() => {
-    replaceFormToEvent();
+    replaceFormToTripEvent();
     document.removeEventListener('keydown', onEscKeyDown);
   });
 
-  render(eventListElement, tripEventComponent.element);
+  render(eventListElement, tripEventComponent);
 };
 
-render(menuElement, new TabsView().element);
-render(filterElement, new FilterView().element);
-render(tripMainElement, new NewEventButtonView().element);
+render(menuElement, new TabsView());
+render(filterElement, new FilterView());
+render(tripMainElement, new NewEventButtonView());
 
 if (tripEvents.length === 0) {
-  render(tripEventsElement, new EmptyListView().element);
+  render(tripEventsElement, new EmptyListView());
 } else {
   const tripEventListComponent = new TripEventListView();
 
-  render(tripMainElement, new TripInfoView(tripEvents).element, RenderPosition.AFTERBEGIN);
-  render(tripEventsElement, new SortView().element);
-  render(tripEventsElement, tripEventListComponent.element);
+  render(tripMainElement, new TripInfoView(tripEvents), RenderPosition.AFTERBEGIN);
+  render(tripEventsElement, new SortView());
+  render(tripEventsElement, tripEventListComponent);
 
   for (let i = 0; i < TRIP_EVENTS_COUNT; i++) {
-    renderTripEvent(tripEventListComponent.element, tripEvents[i]);
+    renderTripEvent(tripEventListComponent, tripEvents[i]);
   }
 }

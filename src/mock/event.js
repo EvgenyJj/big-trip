@@ -1,4 +1,4 @@
-import { getRandomInteger } from '../utils/utils.js';
+import { getRandomInteger } from '../utils/common.js';
 import { TYPES_EVENT, Price, MAX_MINUTES_GAP } from './consts.js';
 import { getDestination } from './destination.js';
 import { getOffers } from './offers.js';

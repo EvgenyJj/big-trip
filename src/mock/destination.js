@@ -1,5 +1,5 @@
-import { getRandomInteger } from '../utils/utils';
-import { CITY_NAMES, CountDestinationDescription, CountDestinationPicture, DESCRIPTION } from './consts';
+import { getRandomInteger } from '../utils/common.js';
+import { CITY_NAMES, CountDestinationDescription, CountDestinationPicture, DESCRIPTION } from './consts.js';
 
 const getPicture = () => `https://loremflickr.com/248/152/travel?random=${Math.random()}`;
 const getCountPicture = () => getRandomInteger(CountDestinationPicture.MIN, CountDestinationPicture.MAX);

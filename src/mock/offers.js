@@ -1,4 +1,4 @@
-import { getRandomInteger } from '../utils/utils.js';
+import { getRandomInteger } from '../utils/common.js';
 import { Price, CountOffers, TITLES_OFFER } from './consts.js';
 
 const getPrice = () => getRandomInteger(Price.MIN, Price.MAX);
